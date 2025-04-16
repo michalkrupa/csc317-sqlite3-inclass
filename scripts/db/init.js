@@ -1,4 +1,4 @@
-const sqlite3 = require("sqlite3").verbose();
+import sqlite3 from 'sqlite3';
 
 // Create or open the 'animals.db' database.
 const db = new sqlite3.Database("animals.db", (err) => {
@@ -9,7 +9,7 @@ const db = new sqlite3.Database("animals.db", (err) => {
 });
 
 //Create an animals table in animals.db
-db.run(`
+await db.run(`
   CREATE TABLE IF NOT EXISTS Animals (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -34,21 +34,21 @@ const insertQuery = `
 `;
 
 // //Insert records using the insert query template
-db.run(insertQuery, ["Elephant", "Savannah", 60, 1], function(err) {
+await db.run(insertQuery, ["Elephant", "Savannah", 60, 1], function(err) {
   if (err) {
     return console.error("Error inserting Elephant:", err.message);
   }
   console.log(`A row has been inserted with rowid ${this.lastID}`);
 });
 
-db.run(insertQuery, ["Turtle", "Ocean", 100, 0], function(err) {
+await db.run(insertQuery, ["Turtle", "Ocean", 100, 0], function(err) {
   if (err) {
     return console.error("Error inserting Turtle:", err.message);
   }
   console.log(`A row has been inserted with rowid ${this.lastID}`);
 });
 
-db.run(insertQuery, ["Dog", "Domestic", 13, 0], function(err) {
+await db.run(insertQuery, ["Dog", "Domestic", 13, 0], function(err) {
   if (err) {
     return console.error("Error inserting Dog:", err.message);
   }
@@ -71,10 +71,9 @@ db.all("SELECT * FROM Animals WHERE life_expectancy > ?", [50], (err, rows) => {
   console.log("Animals with life expectancy over 50 years:", rows);
 });
 
-
 // // Use an update query
 // // to set dog's in_danger property to 1 (true)
-db.run("UPDATE Animals SET in_danger = ? WHERE name = ?", [1, "Dog"], function(err) {
+await db.run("UPDATE Animals SET in_danger = ? WHERE name = ?", [1, "Dog"], function(err) {
   if (err) {
     return console.error("Error updating data:", err.message);
   }
@@ -82,7 +81,7 @@ db.run("UPDATE Animals SET in_danger = ? WHERE name = ?", [1, "Dog"], function(e
 });
 
 // // Delete the dog record :'(
-db.run("DELETE FROM Animals WHERE name = ?", ["Dog"], function(err) {
+await db.run("DELETE FROM Animals WHERE name = ?", ["Dog"], function(err) {
   if (err) {
     return console.error("Error deleting data:", err.message);
   }
