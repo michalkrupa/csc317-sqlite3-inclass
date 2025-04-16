@@ -8,7 +8,7 @@ const db = new sqlite3.Database("animals.db", (err) => {
   console.log("Connected to the animals database.");
 });
 
-//Create an animals table in animals.db
+// Create an animals table in animals.db
 await db.run(`
   CREATE TABLE IF NOT EXISTS Animals (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,16 +24,15 @@ await db.run(`
   console.log("Animals table created (if it didn't already exist).");
 });
 
-// //Insert a new record
-
-// //Create an insert statement template
-// //? will be replaced w/ array index vals using db.run
+// Create an insert statement template
+// ? will be replaced w/ array index vals
+// when we run our insertion queries
 const insertQuery = `
   INSERT INTO Animals (name, habitat, life_expectancy, in_danger)
   VALUES (?, ?, ?, ?)
 `;
 
-// //Insert records using the insert query template
+// Insert records using the insert query template
 await db.run(insertQuery, ["Elephant", "Savannah", 60, 1], function(err) {
   if (err) {
     return console.error("Error inserting Elephant:", err.message);
@@ -62,8 +61,8 @@ db.all("SELECT * FROM Animals", (err, rows) => {
   console.log("All Animals:", rows);
 });
 
-// // Use a select to recall all records
-// // Where life_expectancy is greater than 50
+//  Use a select to recall all records
+//  Where life_expectancy is greater than 50
 db.all("SELECT * FROM Animals WHERE life_expectancy > ?", [50], (err, rows) => {
   if (err) {
     return console.error("Error fetching data:", err.message);
@@ -71,8 +70,8 @@ db.all("SELECT * FROM Animals WHERE life_expectancy > ?", [50], (err, rows) => {
   console.log("Animals with life expectancy over 50 years:", rows);
 });
 
-// // Use an update query
-// // to set dog's in_danger property to 1 (true)
+//  Use an update query
+//  to set dog's in_danger property to 1 (true)
 await db.run("UPDATE Animals SET in_danger = ? WHERE name = ?", [1, "Dog"], function(err) {
   if (err) {
     return console.error("Error updating data:", err.message);
@@ -80,7 +79,7 @@ await db.run("UPDATE Animals SET in_danger = ? WHERE name = ?", [1, "Dog"], func
   console.log(`Rows updated: ${this.changes}`);
 });
 
-// // Delete the dog record :'(
+//  Delete the dog record :'(
 await db.run("DELETE FROM Animals WHERE name = ?", ["Dog"], function(err) {
   if (err) {
     return console.error("Error deleting data:", err.message);
@@ -88,9 +87,9 @@ await db.run("DELETE FROM Animals WHERE name = ?", ["Dog"], function(err) {
   console.log(`Rows deleted: ${this.changes}`);
 });
 
-// // Close the connection to ensure
-// // that the database does not have
-// // empty connections allocated
+//  Close the connection to ensure
+//  that the database does not have
+//  empty connections allocated
 db.close((err) => {
   if (err) {
     return console.error("Error closing the database:", err.message);
